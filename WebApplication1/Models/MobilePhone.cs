@@ -11,10 +11,17 @@ namespace WebApplication1.Models
         {
             this.Id = Guid.NewGuid();
         }
-    
         public Guid Id { get; }
         public string Name { get; set; }
-        public double Price { get; set; }
+        public List<PhoneParams> Params { get; set; }
         public string ProductOwner { get; set; }
+    }
+    public enum PhoneParams
+    {
+        doubleCam,
+        doubleSim,
+        WaterProtected,
+        NoBreak,
+        NFC
     }
 }
