@@ -6,17 +6,13 @@ namespace WebApplication1
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("MobilePhone")]
-    public partial class MobilePhone
+    [Table("PhoneParam")]
+    public partial class PhoneParam
     {
         public Guid Id { get; set; }
 
-        [Column(TypeName = "text")]
-        [Required]
-        public string ProductOwner { get; set; }
+        public Guid MobilePhoneId { get; set; }
 
-        [Column(TypeName = "text")]
-        [Required]
-        public string Name { get; set; }
+        public int Param { get; set; }
     }
 }
