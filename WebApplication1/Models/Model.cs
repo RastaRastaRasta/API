@@ -4,6 +4,7 @@ namespace WebApplication1
   using System.Data.Entity;
   using System.ComponentModel.DataAnnotations.Schema;
   using System.Linq;
+  using WebApplication1.Models;
 
   public partial class Model : DbContext
   {
@@ -14,6 +15,7 @@ namespace WebApplication1
 
     public virtual DbSet<MobilePhone> MobilePhone { get; set; }
     public virtual DbSet<PhoneParam> PhoneParam { get; set; }
+    public virtual DbSet<Param> Params { get; set; }
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {

@@ -10,6 +10,6 @@ namespace WebApplication1.Models
     public Guid Id { get; set; }
     public string ProductOwner { get; set; }
     public string Name { get; set; }
-    public List<int> Params { get; set; }
+    public List<Param> Params { get; set; }
   }
 }

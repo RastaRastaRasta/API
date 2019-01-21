@@ -56,11 +56,11 @@ namespace WebApplication1.Controllers
 
       var db = new Model();
       var mobilePhone = db.MobilePhone.FirstOrDefault(x => x.Id == id);
-      if(mobilePhone != null)
+      if (mobilePhone != null)
       {
 
         var phoneParams = db.PhoneParam.Where(x => x.MobilePhoneId == id).Select(y => y.Param).ToList();
-
+        
         return new Mobiles
         {
           Id = mobilePhone.Id,
@@ -76,83 +76,99 @@ namespace WebApplication1.Controllers
     }
 
     // POST api/values
-    public bool Post([FromBody]Mobiles mobilePhone)
+    public IHttpActionResult Post([FromBody]MobilePhone mobilePhone)
     {
       if (mobilePhone == null)
-        return false;
+        return this.BadRequest();
 
-      var item = db.MobilePhone.FirstOrDefault(x => x.Id == mobilePhone.Id);
-      if (item == null)
-      {
-        return false;
-      }
-
-      item.ProductOwner = mobilePhone.ProductOwner;
-      item.Name = mobilePhone.Name;
-
-      var listRemove = db.PhoneParam.Where(x => x.MobilePhoneId == mobilePhone.Id).ToList();
-      db.PhoneParam.RemoveRange(listRemove);
-
-      foreach(var param in mobilePhone.Params)
-      {
-        db.PhoneParam.Add(new PhoneParam
-        {
-          Id = Guid.NewGuid(),
-          MobilePhoneId = mobilePhone.Id,
-          Param = param
-        }
-          );
-      }
+      db.MobilePhone.Add(mobilePhone);
       db.SaveChanges();
-      return true;
+
+      //item.ProductOwner = mobilePhone.ProductOwner;
+      //item.Name = mobilePhone.Name;
+
+      //var listRemove = db.PhoneParam.Where(x => x.MobilePhoneId == mobilePhone.Id).ToList();
+      //db.PhoneParam.RemoveRange(listRemove);
+
+      //foreach(var param in mobilePhone.Params)
+      //{
+      //  db.PhoneParam.Add(new PhoneParam
+      //  {
+      //    Id = Guid.NewGuid(),
+      //    MobilePhoneId = mobilePhone.Id,
+      //    Param = param
+      //  }
+      //    );
+      //}
+      //db.SaveChanges();
+      return this.Ok();
     }
 
     // PUT api/values/5
-    public bool Put([FromBody]Mobiles mobilePhone)
+    public IHttpActionResult Put(Guid id, [FromBody] MobilePhone mobilePhone)
     {
-      if (mobilePhone == null)
+      if (id == null)
       {
-        return false;
+        return this.BadRequest();
       }
+      var currentMobile = db.MobilePhone.Find(id);
+      if (currentMobile == null)
+        return this.NotFound();
+      currentMobile.Name = mobilePhone.Name;
+      currentMobile.ProductOwner = mobilePhone.ProductOwner;
+      //currentMobile.Param = mobilePhone.Param;
 
-      var item = new MobilePhone
-      {
-        Id = mobilePhone.Id,
-        ProductOwner = mobilePhone.ProductOwner,
-        Name = mobilePhone.Name
-      };
 
-      db.MobilePhone.Add(item);
+      //var item = new MobilePhone
+      //{
+      //  Id = mobilePhone.Id,
+      //  ProductOwner = mobilePhone.ProductOwner,
+      //  Name = mobilePhone.Name
+      //};
 
-      foreach (var param in mobilePhone.Params)
-      {
-        db.PhoneParam.Add(new PhoneParam
-        {
-          Id = Guid.NewGuid(),
-          MobilePhoneId = mobilePhone.Id,
-          Param = param
-        }
-          );
-      }
+      //db.MobilePhone.Add(item);
+
+      //foreach (var param in mobilePhone.Params)
+      //{
+      //  db.PhoneParam.Add(new PhoneParam
+      //  {
+      //    Id = Guid.NewGuid(),
+      //    MobilePhoneId = mobilePhone.Id,
+      //    Param = param
+      //  }
+      //    );
+      //}
 
       db.SaveChanges();
-      return true;
+      return this.Ok();
     }
 
     // DELETE api/values/5
-    public bool Delete(Guid id)
+    public IHttpActionResult Delete(Guid id)
     {
-      var mobilePhone = db.MobilePhone.FirstOrDefault(x => x.Id == id);
-      if (mobilePhone != null)
-      {
-        db.MobilePhone.Remove(mobilePhone);
-        db.SaveChanges();
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+
+      if (id == null)
+        return this.BadRequest();
+
+      var mobilePhone = db.MobilePhone.Find(id);
+      if (mobilePhone == null)
+        return this.NotFound();
+      db.MobilePhone.Remove(mobilePhone);
+      db.SaveChanges();
+      //{
+      //  var mobilePhone = db.MobilePhone.FirstOrDefault(x => x.Id == id);
+      //  if (mobilePhone != null)
+      //  {
+      //    db.MobilePhone.Remove(mobilePhone);
+      //    db.SaveChanges();
+      //    return true;
+      //  }
+      //  else
+      //  {
+      //    return false;
+      return this.Ok();
     }
   }
 }
+
+

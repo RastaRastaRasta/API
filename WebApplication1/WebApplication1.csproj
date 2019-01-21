@@ -104,6 +104,7 @@
     <Compile Include="Models\MobilePhone.cs" />
     <Compile Include="Models\Mobiles.cs" />
     <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\Param.cs" />
     <Compile Include="Models\PhoneParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
