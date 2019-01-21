@@ -51,6 +51,9 @@ namespace WebApplication1.Controllers
     // GET api/values/5
     public Mobiles Get(Guid id)
     {
+      if (id == null)
+        return null;
+
       var db = new Model();
       var mobilePhone = db.MobilePhone.FirstOrDefault(x => x.Id == id);
       if(mobilePhone != null)
@@ -75,6 +78,9 @@ namespace WebApplication1.Controllers
     // POST api/values
     public bool Post([FromBody]Mobiles mobilePhone)
     {
+      if (mobilePhone == null)
+        return false;
+
       var item = db.MobilePhone.FirstOrDefault(x => x.Id == mobilePhone.Id);
       if (item == null)
       {
