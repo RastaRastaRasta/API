@@ -76,12 +76,24 @@ namespace WebApplication1.Controllers
     }
 
     // POST api/values
-    public IHttpActionResult Post([FromBody]MobilePhone mobilePhone)
+    public IHttpActionResult Post([FromBody]PhoneModel mobilePhone)
     {
       if (mobilePhone == null)
         return this.BadRequest();
 
-      db.MobilePhone.Add(mobilePhone);
+      db.MobilePhone.Add( new MobilePhone
+      {
+        Id = mobilePhone.Id,
+        Name = mobilePhone.Name,
+        ProductOwner = mobilePhone.ProductOwner
+      });
+      db.PhoneParam.AddRange(mobilePhone.PhoneParams.Select(x => new PhoneParam
+      {
+        Id = Guid.NewGuid(),
+        MobilePhoneId = mobilePhone.Id,
+        ParamId = x
+      }));
+
       db.SaveChanges();
 
       //item.ProductOwner = mobilePhone.ProductOwner;
@@ -105,19 +117,27 @@ namespace WebApplication1.Controllers
     }
 
     // PUT api/values/5
-    public IHttpActionResult Put(Guid id, [FromBody] MobilePhone mobilePhone)
+    public IHttpActionResult Put([FromBody] PhoneModel mobilePhone)
     {
-      if (id == null)
+      if (mobilePhone.Id == Guid.Empty)
       {
         return this.BadRequest();
       }
-      var currentMobile = db.MobilePhone.Find(id);
+      var currentMobile = db.MobilePhone.Find(mobilePhone.Id);
       if (currentMobile == null)
         return this.NotFound();
       currentMobile.Name = mobilePhone.Name;
       currentMobile.ProductOwner = mobilePhone.ProductOwner;
-      //currentMobile.Param = mobilePhone.Param;
 
+      var param = db.PhoneParam.Where(x => x.MobilePhoneId == mobilePhone.Id);
+      db.PhoneParam.RemoveRange(param);
+
+      db.PhoneParam.AddRange(mobilePhone.PhoneParams.Select(x=> new PhoneParam
+      {
+        Id = Guid.NewGuid(),
+        MobilePhoneId = mobilePhone.Id,
+        ParamId = x
+      }));
 
       //var item = new MobilePhone
       //{
@@ -151,6 +171,10 @@ namespace WebApplication1.Controllers
         return this.BadRequest();
 
       var mobilePhone = db.MobilePhone.Find(id);
+
+      var param = db.PhoneParam.Where(x => x.MobilePhoneId == mobilePhone.Id);
+      db.PhoneParam.RemoveRange(param);
+
       if (mobilePhone == null)
         return this.NotFound();
       db.MobilePhone.Remove(mobilePhone);
