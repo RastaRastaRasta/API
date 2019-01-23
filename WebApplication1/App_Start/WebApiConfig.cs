@@ -15,8 +15,8 @@ namespace WebApplication1
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                name: "DefaultApi", //имя маршрута
+                routeTemplate: "api/{controller}/{id}", //адрес маршрута для проверки
                 defaults: new { id = RouteParameter.Optional }
             );
         }
